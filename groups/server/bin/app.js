@@ -12,6 +12,12 @@ var _mongoose = require("mongoose");
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
+var _db = require("./db");
+
+var db = _interopRequireWildcard(_db);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
@@ -22,13 +28,34 @@ var DATABASE = process.env.DATABASE;
 var app = (0, _express2.default)();
 
 if (DATABASE === undefined) {
-     console.log("Banco de dados indefinido");
-     process.exit(1);
+    console.log("Banco de dados indefinido");
+    process.exit(1);
 }
 
 _mongoose2.default.connect(DATABASE);
 
 app.use(_bodyParser2.default.json());
+app.get('/listGroups', function (req, res) {
+    return db.getAllGroups(res);
+});
+app.get("/findById", function (req, res) {
+    var id = req.query.id;
+    db.getById(res, id);
+});
+app.get("/findByName", function (req, res) {
+    var name = req.query.name;
+    db.getByName(res, name);
+});
+app.post('/createGroup', function (req, res) {
+    var name = req.body.name;
+    var status = req.body.status;
+    var description = req.body.description;
+    if (description === undefined) {
+        description = "No description provided";
+    }
+    db.createGroup(res, name, status, description);
+});
+
 // app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))
 //
 // app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
@@ -44,5 +71,5 @@ app.use(_bodyParser2.default.json());
 //     });
 
 app.listen(3001, function () {
-     return console.log("Listening in port 3001");
+    return console.log("Listening in port 3001");
 });

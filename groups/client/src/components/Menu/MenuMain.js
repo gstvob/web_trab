@@ -11,12 +11,13 @@ const style = {
     width: '15%',
     marginTop:"30px"
 }
-const MenuMain = () => (
+const MenuMain = (props) => (
+
 <div style={style}>
     <List>
-        <ListItem primaryText="Add Group" leftIcon={<GroupAdd/>} />
-        <ListItem primaryText="Search Group" leftIcon={<Search />} />
-        <ListItem primaryText="Remove Groups" leftIcon={<Remove />} />
+        <ListItem onClick={props.addG} primaryText="Add Group" leftIcon={<GroupAdd/>} />
+        <ListItem onClick={props.searchG} primaryText="Search Group" leftIcon={<Search />} />
+        <ListItem onClick={props.removeG} primaryText="Remove Groups" leftIcon={<Remove />} />
     </List>
     <Divider />
     <List>

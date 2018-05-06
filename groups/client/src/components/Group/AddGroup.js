@@ -1,91 +1,87 @@
 import React, { Component } from "react";
-import {Card, CardText, CardActions} from 'material-ui/Card';
+import {CardText, CardActions} from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
+import Paper from "material-ui/Paper";
 import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from "material-ui/Checkbox";
 
 class AddGroup extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     state = {
         name: undefined,
         description: undefined,
-        public: false,
+        status: false,
         //participants: undefined,
         errorName: undefined
         //errorParticipants: undefined
     }
 
-  canAdd () {
+    canAdd () {
     const s = this.state;
-    return s.errorName === undefined;
-  }
-
-  changeName = (ev, value) => {
-    if (value === '') {
-        this.setState(prevState => ({errorName: 'Mandatory Field'}));
-    } else {
-        this.setState(prevState => ({name: value, errorName: undefined}));
+    return s.errorName === undefined && s.name !== undefined;
     }
-  }
-  changeDescription = (ev, value) => {
+
+    changeName = (ev, value) => {
+        if (value === '') {
+            this.setState(prevState => ({errorName: 'Mandatory Field'}));
+        } else {
+            this.setState(prevState => ({name: value, errorName: undefined}));
+        }
+    }
+    changeDescription = (ev, value) => {
       this.setState(prevState => ({description:value}));
-  }
+    }
 
-  changePublic = () => {
-      this.setState(prevState => ({public: !this.state.public}));
-  }
+    changePublic = () => {
+      this.setState(prevState => ({status: !this.state.status}));
+    }
 
-  addGroup = () => {
-    const data = {
-      name: this.state.name,
-      description: this.state.description,
-      public: this.state.public
-  };
-    this.props.onAdd(data);
-  }
+    addGroup = () => {
+        const data = {
+            name: this.state.name,
+            description: this.state.description,
+            status: this.state.status
+        };
+        this.props.onAdd(data);
+    }
 
   render () {
     return (
-        <Card>
+        <Paper style={{marginLeft:"15%"}}>
             <CardText>
                 <TextField
-                    hintText='type the name of the group'
+                    hintText='Name the group'
                     floatingLabelText='Group Name'
                     errorText={this.state.errorName}
                     onChange={this.changeName}
                 />
                 <br/>
                 <TextField
-                    hintText='type the description of the group'
+                    hintText='Describe group'
                     floatingLabelText='Group Description'
                     errorText={this.state.erroAutor}
                     onChange={this.altereAutor}
                 />
-                <br/>
+                <br/><br/><br/>
                 <Checkbox
                     label="is this a public group?"
-                    checked={this.state.public}
+                    checked={this.state.status}
                     onCheck={this.changePublic.bind(this)}
                 />
-
             </CardText>
+            <br/>
 
             <CardActions>
                 <RaisedButton
-                    label="Cadastrar"
+                    label="Register"
                     disabled={!this.canAdd()}
                     onClick={this.addGroup}
                 />
                 <RaisedButton
-                    label="Cancelar"
+                    label="Cancel"
                     onClick={this.props.onCancele}
                 />
             </CardActions>
-        </Card>
+        </Paper>
     );
   }
 }
