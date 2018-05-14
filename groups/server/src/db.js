@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 
+const ObjectId = mongoose.Schema.Types.ObjectId;
+
 const groupSchema = new mongoose.Schema({
   name: String,
   status: Boolean,
@@ -11,9 +13,14 @@ const userSchema = new mongoose.Schema({
     username: String
 });
 
+const users_groupsSchema = new mongoose.Schema({
+    group : {type : ObjectId, ref:groupSchema},
+    user : {type: ObjectId, ref: userSchema}
+})
 
 const Group = mongoose.model('groups', groupSchema);
 const User = mongoose.model('user', userSchema);
+const User_Group = mongoose.model("user_group", users_groupsSchema);
 
 function createUser(res, username) {
     new User({username}).save().then(
@@ -21,14 +28,20 @@ function createUser(res, username) {
         () => res.json({inserted:false})
     );
 }
-
-
 function createGroup(res, name, status, description) {
     new Group({name, status, description}).save().then(
         (new_group) => res.json({inserted: true, id:new_group._id}),
         () => res.json({inserted: false})
     );
 }
+
+function pushUserIntoGroup(res, group, user) {
+    new User_Group({group, user}).save().then(
+        (new_user_group) => res.json({inserted:true, id:new_user_group._id}),
+        () => res.json({inserted: false})
+    );
+}
+
 
 function getAllUsers(res) {
     User.find().then(
@@ -60,4 +73,4 @@ function getByName(res, name) {
     );
 }
 
-export {getAllUsers, createUser,createGroup, getAllGroups, getById, getByName}
+export {pushUserIntoGroup, getAllUsers, createUser,createGroup, getAllGroups, getById, getByName}

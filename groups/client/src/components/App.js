@@ -4,6 +4,7 @@ import AddUser from "./User/AddUser";
 import FindAllUsers from "./User/FindAllUsers";
 import AddGroup from "./Group/AddGroup";
 import Search from "./Group/Search";
+import PushUser from "./Group/PushUser";
 import operation from "./DB/dboperations"
 import AppBar from "material-ui/AppBar";
 import Paper from "material-ui/Paper";
@@ -15,12 +16,12 @@ class App extends Component {
         ADDUSER:"add user",
         ADDGROUP: "add group",
         SEARCH: "search group",
-        VIEWUSERS: "view users"
+        VIEWUSERS: "view users",
+        PUSHUSER : "push user"
     };
 
     state = {
         current: this.action.HOME,
-        users: undefined
     }
 
     addUser = () => {
@@ -42,6 +43,11 @@ class App extends Component {
         .catch(() => console.log("fail"));
 
         let new_state = {current:this.action.HOME};
+        this.setState(curState => (new_state));
+    }
+
+    push_user = () => {
+        let new_state = {current:this.action.PUSHUSER};
         this.setState(curState => (new_state));
     }
 
@@ -69,6 +75,8 @@ class App extends Component {
                 return <FindAllUsers/>
             case this.action.ADDGROUP:
                 return <AddGroup onAdd ={this.new_group}/>
+            case this.action.PUSHUSER:
+                return <PushUser/>
             default:
                 return <div> Micro serviço de grupos </div>
         }
@@ -82,7 +90,7 @@ class App extends Component {
                     <AppBar style={{
                         backgroundColor:"#ECEFF1"
                     }} title="Groups Micro-service" titleStyle={{color:"#424242"}} showMenuIconButton={false} />
-                    <MenuMain addU={this.addUser} addG={this.addGroupPage} searchG={this.search_group} allU={this.viewUsers}/>
+                    <MenuMain addU={this.addUser} addG={this.addGroupPage} searchG={this.search_group} allU={this.viewUsers} addUG={this.push_user}/>
                 </Paper>
                 {content}
             </div>

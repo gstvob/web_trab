@@ -62,6 +62,11 @@ app.post("/createuser", function (req, res) {
     var username = req.body.username;
     db.createUser(res, username);
 });
+app.post("/pushuser", function (req, res) {
+    var idUser = req.body.idUser;
+    var idGroup = req.body.idGroup;
+    db.pushUserIntoGroup(res, idUser, idGroup);
+});
 
 // app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))
 //
