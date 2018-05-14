@@ -35,6 +35,9 @@ if (DATABASE === undefined) {
 _mongoose2.default.connect(DATABASE);
 
 app.use(_bodyParser2.default.json());
+app.get("/allusers", function (req, res) {
+    return db.getAllUsers(res);
+});
 app.get('/listGroups', function (req, res) {
     return db.getAllGroups(res);
 });
@@ -54,6 +57,10 @@ app.post('/createGroup', function (req, res) {
         description = "No description provided";
     }
     db.createGroup(res, name, status, description);
+});
+app.post("/createuser", function (req, res) {
+    var username = req.body.username;
+    db.createUser(res, username);
 });
 
 // app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))

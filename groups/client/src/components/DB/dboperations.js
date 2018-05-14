@@ -1,5 +1,12 @@
 const operation = {
 
+    add_user: (data) => {
+        return fetch("/createuser", {
+            method:"post",
+            headers: {"Content-Type":"application/json"},
+            body:JSON.stringify(data)
+        }).then(r=>checkCode(r)).then(r=>r.json())
+    },
     insert_group: (data) =>{
         return fetch("/createGroup",{
                 method: "post",
@@ -7,6 +14,12 @@ const operation = {
                 body: JSON.stringify(data)
             }).then(r => checkCode(r)).then(r=>r.json())
     },
+
+    all_users: () => {
+        return fetch("/allusers")
+                .then(r=>checkCode(r)).then(r=>r.json());
+    },
+
     list_groups: () => {
         return fetch("/listGroups")
                 .then(r=> checkCode(r)).then(r=>r.json());

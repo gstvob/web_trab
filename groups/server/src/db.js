@@ -6,12 +6,34 @@ const groupSchema = new mongoose.Schema({
   description: String
 });
 
+//apenas uma tabela para colocar usuário para razões de teste.
+const userSchema = new mongoose.Schema({
+    username: String
+});
+
+
 const Group = mongoose.model('groups', groupSchema);
+const User = mongoose.model('user', userSchema);
+
+function createUser(res, username) {
+    new User({username}).save().then(
+        (new_user) => res.json({inserted: true, id:new_user._id}),
+        () => res.json({inserted:false})
+    );
+}
+
 
 function createGroup(res, name, status, description) {
     new Group({name, status, description}).save().then(
         (new_group) => res.json({inserted: true, id:new_group._id}),
         () => res.json({inserted: false})
+    );
+}
+
+function getAllUsers(res) {
+    User.find().then(
+        (users) => res.json(users),
+        () => res.json([])
     );
 }
 
@@ -38,4 +60,4 @@ function getByName(res, name) {
     );
 }
 
-export {createGroup, getAllGroups, getById, getByName}
+export {getAllUsers, createUser,createGroup, getAllGroups, getById, getByName}

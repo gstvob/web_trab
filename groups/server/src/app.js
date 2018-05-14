@@ -17,6 +17,7 @@ if (DATABASE === undefined) {
 mongoose.connect(DATABASE);
 
 app.use(bodyParser.json());
+app.get("/allusers", (req, res) => db.getAllUsers(res));
 app.get('/listGroups', (req, res) => db.getAllGroups(res));
 app.get("/findById", (req,res) => {
     let id = req.query.id
@@ -34,6 +35,10 @@ app.post('/createGroup', (req, res) => {
       description = "No description provided";
   }
   db.createGroup(res, name, status, description)
+});
+app.post("/createuser", (req,res) => {
+    let username = req.body.username
+    db.createUser(res, username)
 });
 
 // app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import MenuMain from "./Menu/MenuMain";
+import AddUser from "./User/AddUser";
+import FindAllUsers from "./User/FindAllUsers";
 import AddGroup from "./Group/AddGroup";
 import Search from "./Group/Search";
 import operation from "./DB/dboperations"
@@ -10,19 +12,30 @@ class App extends Component {
 
     action = {
         HOME: "homepage",
+        ADDUSER:"add user",
         ADDGROUP: "add group",
-        SEARCH: "search group"
+        SEARCH: "search group",
+        VIEWUSERS: "view users"
     };
 
     state = {
-        current: this.action.HOME
+        current: this.action.HOME,
+        users: undefined
     }
 
+    addUser = () => {
+        let new_state = {current: this.action.ADDUSER};
+        this.setState(curState => (new_state));
+    }
     addGroupPage = () => {
         let new_state = {current: this.action.ADDGROUP};
-        this.setState(curState => (new_state))
+        this.setState(curState => (new_state));
     }
 
+    viewUsers = () => {
+        let new_state = {current: this.action.VIEWUSERS};
+        this.setState(curState => (new_state));
+    }
     new_group = (data) => {
         operation.insert_group(data)
         .then((r) => console.log(r))
@@ -37,14 +50,27 @@ class App extends Component {
         this.setState(curState => (new_state));
     }
 
+    new_user = (data) => {
+        operation.add_user(data)
+        .then((r)=>console.log(r))
+        .catch(()=>console.log("fail"));
+
+        let new_state = {current:this.action.HOME};
+        this.setState(curState => (new_state));
+    }
+
     _setcontent = (current) => {
         switch(current) {
+            case this.action.ADDUSER:
+                return <AddUser onAddU={this.new_user} />
             case this.action.SEARCH:
                 return <Search/>
+            case this.action.VIEWUSERS:
+                return <FindAllUsers/>
             case this.action.ADDGROUP:
                 return <AddGroup onAdd ={this.new_group}/>
             default:
-                return <div> fucken ell amte </div>
+                return <div> Micro serviço de grupos </div>
         }
     }
 
@@ -56,9 +82,9 @@ class App extends Component {
                     <AppBar style={{
                         backgroundColor:"#ECEFF1"
                     }} title="Groups Micro-service" titleStyle={{color:"#424242"}} showMenuIconButton={false} />
-                    <MenuMain addG={this.addGroupPage} searchG={this.search_group}/>
-                    {content}
+                    <MenuMain addU={this.addUser} addG={this.addGroupPage} searchG={this.search_group} allU={this.viewUsers}/>
                 </Paper>
+                {content}
             </div>
         );
     }
