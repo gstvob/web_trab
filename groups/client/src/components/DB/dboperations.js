@@ -34,12 +34,11 @@ const operation = {
     },
     push_user_into_group: (data) => {
         return fetch("/pushuser", {
-                method: "post",
-                headers: {"Content-Type":"application/json"},
-                body: JSON.stringify(data)
-        }).then(r=>checkCode(r)).then(r=>r.json())
+                    method: 'post',
+                    headers :{"Content-Type":"application/json"},
+                    body: JSON.stringify(data)
+        }).then(r=>checkCode(r)).then(r=>r.json());
     }
-
 }
 
 function checkCode(response) {

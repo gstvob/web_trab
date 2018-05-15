@@ -1,11 +1,14 @@
 import mongoose from 'mongoose'
 
-const ObjectId = mongoose.Schema.Types.ObjectId;
+const ObjectId = mongoose.Schema.ObjectId;
 
 const groupSchema = new mongoose.Schema({
   name: String,
   status: Boolean,
-  description: String
+  description: String,
+  participants: [
+      {type:ObjectId, ref:'user'}
+  ]
 });
 
 //apenas uma tabela para colocar usuário para razões de teste.
@@ -13,14 +16,9 @@ const userSchema = new mongoose.Schema({
     username: String
 });
 
-const users_groupsSchema = new mongoose.Schema({
-    group : {type : ObjectId, ref:groupSchema},
-    user : {type: ObjectId, ref: userSchema}
-})
 
 const Group = mongoose.model('groups', groupSchema);
 const User = mongoose.model('user', userSchema);
-const User_Group = mongoose.model("user_group", users_groupsSchema);
 
 function createUser(res, username) {
     new User({username}).save().then(
@@ -34,12 +32,19 @@ function createGroup(res, name, status, description) {
         () => res.json({inserted: false})
     );
 }
-
-function pushUserIntoGroup(res, group, user) {
-    new User_Group({group, user}).save().then(
-        (new_user_group) => res.json({inserted:true, id:new_user_group._id}),
-        () => res.json({inserted: false})
-    );
+function pushUserIntoGroup(res, user, group) {
+    Group.findById(group, (err, doc) => {
+        if (err) {
+            console.log(err);
+        } else {
+            doc.participants.push(user);
+            doc.save()
+                .then(
+                    (updated) => res.json({updated:true}),
+                    () => res.json({inserted:false})
+            );
+        }
+    });
 }
 
 
@@ -51,26 +56,36 @@ function getAllUsers(res) {
 }
 
 function getAllGroups(res) {
-    Group.find().then(
-        (groups) => res.json(groups),
-        () => res.json([])
-    );
+    Group.find().populate('participants').exec((err, doc) => {
+        if (err) {
+            console.log(err);
+            res.json(err)
+        }
+        console.log(doc);
+        res.json(doc);
+    });
 }
 
 function getById(res, id) {
-    Group.findById(id)
-    .then(
-        (group) => res.json(group),
-        () => res.json(null)
-    );
+    Group.findById(id).populate("participants").exec((err, doc) => {
+        if (err) {
+            console.log(err);
+            res.json(err);
+        }
+        console.log(doc);
+        res.json(doc);
+    });
 }
 
 function getByName(res, name) {
-    Group.find().where("name", new RegExp(name))
-    .then(
-        (groups) => res.json(groups),
-        () => res.json([])
-    );
+    Group.find().where("name", new RegExp(name)).populate("participants").exec((err,doc) => {
+        if (err) {
+            console.log(err);
+            res.json(err)
+        }
+        console.log(doc);
+        res.json(doc);
+    });
 }
 
 export {pushUserIntoGroup, getAllUsers, createUser,createGroup, getAllGroups, getById, getByName}

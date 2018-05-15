@@ -19,6 +19,7 @@ class ViewGroup extends Component {
           <TableHeaderColumn>Num</TableHeaderColumn>
           <TableHeaderColumn>ID</TableHeaderColumn>
           <TableHeaderColumn>Name</TableHeaderColumn>
+          <TableHeaderColumn>Participants</TableHeaderColumn>
           <TableHeaderColumn>Public</TableHeaderColumn>
           <TableHeaderColumn>Description</TableHeaderColumn>
         </TableRow>
@@ -35,6 +36,7 @@ class ViewGroup extends Component {
         <TableRowColumn>{index+1}</TableRowColumn>
         <TableRowColumn>{group._id}</TableRowColumn>
         <TableRowColumn>{group.name}</TableRowColumn>
+        <TableRowColumn>{group.participants.map((participant, index) => (participant['username']+", "))}</TableRowColumn>
         <TableRowColumn>{String(group.status)}</TableRowColumn>
         <TableRowColumn>{group.description}</TableRowColumn>
         </TableRow>

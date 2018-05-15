@@ -58,8 +58,7 @@ class AddGroup extends Component {
                 <TextField
                     hintText='Describe group'
                     floatingLabelText='Group Description'
-                    errorText={this.state.erroAutor}
-                    onChange={this.altereAutor}
+                    onChange={this.changeDescription}
                 />
                 <br/><br/><br/>
                 <Checkbox
