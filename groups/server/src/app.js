@@ -17,6 +17,7 @@ if (DATABASE === undefined) {
 mongoose.connect(DATABASE);
 
 app.use(bodyParser.json());
+app.use(express.static('../public'));
 app.get("/allusers", (req, res) => db.getAllUsers(res));
 app.get('/listGroups', (req, res) => db.getAllGroups(res));
 app.get("/findById", (req,res) => {

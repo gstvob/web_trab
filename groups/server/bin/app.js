@@ -35,6 +35,7 @@ if (DATABASE === undefined) {
 _mongoose2.default.connect(DATABASE);
 
 app.use(_bodyParser2.default.json());
+app.use(_express2.default.static('../public'));
 app.get("/allusers", function (req, res) {
     return db.getAllUsers(res);
 });
