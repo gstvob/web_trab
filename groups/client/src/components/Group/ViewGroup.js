@@ -11,8 +11,9 @@ import {
 
 class ViewGroup extends Component {
 
-  __table(groups) {
-    const rows = this.__rows(groups)
+
+  __table() {
+    const rows = this.__rows()
     return <Table>
       <TableHeader displaySelectAll={false}>
         <TableRow>
@@ -30,8 +31,9 @@ class ViewGroup extends Component {
       </Table>
   }
 
-  __rows (groups) {
-      return groups.map( (group, index) => (
+  __rows () {
+      console.log(typeof(this.props.groups))
+      return this.props.groups.map( (group, index) => (
         <TableRow key={index}>
         <TableRowColumn>{index+1}</TableRowColumn>
         <TableRowColumn>{group._id}</TableRowColumn>
@@ -45,12 +47,13 @@ class ViewGroup extends Component {
 
   render() {
     let content
+    console.log(this.props.groups)
     if (this.props.groups !== undefined)
-      if (this.props.groups.length === 0)
-      content = <h3>No groups were found</h3>
-    else
-      content =  this.__table(this.props.groups)
-
+        if (this.props.groups.length === 0)
+            content = <h3>No groups were found</h3>
+        else
+            console.log("top")
+            content =  this.__table()
     return (<div>{content}</div>)
   }
 }

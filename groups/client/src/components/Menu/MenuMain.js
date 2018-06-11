@@ -9,13 +9,7 @@ const style = {
     marginTop:"30px"
 }
 class MenuMain extends Component {
-    user_groups = () => {
-        let groups = this.props.groups;
-        return groups.map( (group, index) => (
-          <ListItem key={index} primaryText={group.name} />
-        ) )
-    }
-    
+
     render () {
         if (this.props.logged === false) {
             return (<div style={style}>
@@ -26,9 +20,9 @@ class MenuMain extends Component {
         } else {
             return (<div style={style}>
                 <List>
-                    <ListItem onClick={this.props.addG} primaryText="Create Group" leftIcon={<GroupAdd/>} />
-                    <ListItem onClick={this.props.searchG} primaryText="Search Group" leftIcon={<Search />} />
-                    {this.user_groups()}
+                    <ListItem onClick={this.props.addG} primaryText="Criar Grupo" leftIcon={<GroupAdd/>} />
+                    <ListItem onClick={this.props.searchG} primaryText="Buscar Grupos" leftIcon={<Search />} />
+                    <ListItem onClick={this.props.showGroups} primaryText="Meus Grupos" leftIcon={<GroupAdd/>} />
                 </List>
 
             </div>);

@@ -6,6 +6,7 @@ import Search from "./Group/Search";
 import operation from "./DB/dboperations"
 import AppBar from "material-ui/AppBar";
 import Paper from "material-ui/Paper";
+import ViewGroup from "./Group/ViewGroup";
 
 class App extends Component {
 
@@ -14,6 +15,7 @@ class App extends Component {
         LOGIN:"login",
         ADDGROUP: "add group",
         SEARCH: "search group",
+        SHOWGROUPS:"show my groups"
     };
 
     state = {
@@ -31,7 +33,6 @@ class App extends Component {
     log = (user_login) => {
         let new_state = {current: this.action.HOME, logged:true, user:user_login}
         this.setState(curState => (new_state))
-        this.get_user_groups()
     }
 
     addGroupPage = () => {
@@ -46,8 +47,8 @@ class App extends Component {
         let new_state = {current:this.action.HOME};
         this.setState(curState => (new_state));
     }
-    search_group = () => {
-        let new_state = {current: this.action.SEARCH};
+    showGroups = () => {
+        let new_state = {current:this.action.SHOWGROUPS};
         this.setState(curState => (new_state));
     }
     get_user_groups = () => {
@@ -56,10 +57,11 @@ class App extends Component {
             .catch(() => {return null})
     }
     _handle_groups(groups) {
-        let new_state = {groups:groups}
+        let new_state = {current:this.action.SHOWGROUPS, groups:groups}
         this.setState(curState => (new_state))
     }
     _setcontent = (current) => {
+
         switch(current) {
             case this.action.LOGIN:
                 return <Login onloginSuccess={this.log}/>
@@ -67,11 +69,12 @@ class App extends Component {
                 return <Search/>
             case this.action.ADDGROUP:
                 return <AddGroup user={this.state.user[0]["_id"]}onAdd ={this.new_group}/>
+            case this.action.SHOWGROUPS:
+                return <ViewGroup groups={this.state.groups} />
             default:
                 return <div> Bem vindo {this.state.user === undefined ? "":this.state.user[0]["username"]}</div>
         }
     }
-
     render () {
         let content = this._setcontent(this.state.current);
 
@@ -81,7 +84,7 @@ class App extends Component {
                     <AppBar style={{
                         backgroundColor:"#ECEFF1"
                     }} title="Groups Micro-service" titleStyle={{color:"#424242"}} showMenuIconButton={false} />
-                    <MenuMain login={this.login} groups={this.state.groups} logged={this.state.logged} addU={this.addUser} addG={this.addGroupPage} searchG={this.search_group} allU={this.viewUsers} addUG={this.push_user}/>
+                    <MenuMain login={this.login} groups={this.state.groups} logged={this.state.logged} addG={this.addGroupPage} searchG={this.search_group} showGroups={this.get_user_groups}/>
                 </Paper>
                 {content}
             </div>
