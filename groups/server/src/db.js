@@ -6,6 +6,7 @@ const groupSchema = new mongoose.Schema({
   name: String,
   status: Boolean,
   description: String,
+  admin : {type:ObjectId, ref:"user"},
   participants: [
       {type:ObjectId, ref:'user'}
   ]
@@ -15,8 +16,6 @@ const groupSchema = new mongoose.Schema({
 const userSchema = new mongoose.Schema({
     username: String
 });
-
-
 const Group = mongoose.model('groups', groupSchema);
 const User = mongoose.model('user', userSchema);
 
@@ -26,11 +25,26 @@ function createUser(res, username) {
         () => res.json({inserted:false})
     );
 }
-function createGroup(res, name, status, description) {
-    new Group({name, status, description}).save().then(
-        (new_group) => res.json({inserted: true, id:new_group._id}),
+function createGroup(res, name, status, description, admin) {
+    new Group({name, status, description, admin}).save().then(
+        (new_group) => {
+            res.json({inserted: true, id:new_group._id, admin:new_group.admin})
+            new_group.participants.push(admin)
+            new_group.save()
+        },
         () => res.json({inserted: false})
     );
+}
+function findGroupByUser(res, user) {
+    Group.find({participants : user}).populate("participants")
+    .exec((err, doc) => {
+        if (err) {
+            console.log(err);
+            res.json(err)
+        }
+        console.log(doc);
+        res.json(doc);
+    });
 }
 function pushUserIntoGroup(res, user, group) {
     Group.findById(group, (err, doc) => {
@@ -46,8 +60,6 @@ function pushUserIntoGroup(res, user, group) {
         }
     });
 }
-
-
 function getAllUsers(res) {
     User.find().then(
         (users) => res.json(users),
@@ -88,4 +100,11 @@ function getByName(res, name) {
     });
 }
 
-export {pushUserIntoGroup, getAllUsers, createUser,createGroup, getAllGroups, getById, getByName}
+function getUserByName(res, name) {
+    User.find().where("username", name).then(
+        (user) => res.json(user),
+        () => res.json(null));
+}
+
+
+export {pushUserIntoGroup, getAllUsers, createUser,createGroup, getAllGroups, getById, getByName, getUserByName, findGroupByUser}

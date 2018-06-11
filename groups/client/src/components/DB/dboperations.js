@@ -20,10 +20,22 @@ const operation = {
                 .then(r=>checkCode(r)).then(r=>r.json());
     },
 
+    login: (name) => {
+        return fetch(`/login?username=${name}`)
+                .then(r=>checkCode(r))
+                .then(r=>r.json());
+    },
+
     list_groups: () => {
         return fetch("/listGroups")
                 .then(r=> checkCode(r)).then(r=>r.json());
     },
+
+    find_user_groups: (user) => {
+        return fetch(`/usergroups?user=${user}`)
+                .then(r=>checkCode(r)).then(r=>r.json())
+    },
+
     find_byId : (id) => {
         return fetch(`/findById?id=${id}`)
                 .then(r => checkCode(r)).then(r=>r.json());

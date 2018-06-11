@@ -28,14 +28,23 @@ app.get("/findByName", (req, res) => {
     let name = req.query.name
     db.getByName(res, name)
 })
+app.get("/login", (req, res) => {
+    let name = req.query.username
+    db.getUserByName(res,name)
+})
+app.get("/usergroups", (req, res) => {
+    let user = req.query.user;
+    db.findGroupByUser(res, user)
+})
 app.post('/createGroup', (req, res) => {
   let name = req.body.name
   let status = req.body.status
   let description = req.body.description
+  let admin = req.body.admin
   if (description === undefined) {
       description = "No description provided";
   }
-  db.createGroup(res, name, status, description)
+  db.createGroup(res, name, status, description, admin)
 });
 app.post("/createuser", (req,res) => {
     let username = req.body.username

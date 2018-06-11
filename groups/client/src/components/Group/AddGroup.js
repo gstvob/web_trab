@@ -39,7 +39,8 @@ class AddGroup extends Component {
         const data = {
             name: this.state.name,
             description: this.state.description,
-            status: this.state.status
+            status: this.state.status,
+            admin: this.props.user
         };
         this.props.onAdd(data);
     }

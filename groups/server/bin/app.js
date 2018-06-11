@@ -50,14 +50,23 @@ app.get("/findByName", function (req, res) {
     var name = req.query.name;
     db.getByName(res, name);
 });
+app.get("/login", function (req, res) {
+    var name = req.query.username;
+    db.getUserByName(res, name);
+});
+app.get("/usergroups", function (req, res) {
+    var user = req.query.user;
+    db.findGroupByUser(res, user);
+});
 app.post('/createGroup', function (req, res) {
     var name = req.body.name;
     var status = req.body.status;
     var description = req.body.description;
+    var admin = req.body.admin;
     if (description === undefined) {
         description = "No description provided";
     }
-    db.createGroup(res, name, status, description);
+    db.createGroup(res, name, status, description, admin);
 });
 app.post("/createuser", function (req, res) {
     var username = req.body.username;
