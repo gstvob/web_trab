@@ -1,60 +1,36 @@
 import React, {Component} from 'react'
-
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
-
+import {Tab, Tabs} from "material-ui/Tabs";
+import Paper from "material-ui/Paper";
+import DetailGroup from "./DetailGroup";
 class ViewGroup extends Component {
 
+    tabsStyle = {
+        color:"black",
+        backgroundColor:"#ECEFF1"
+    }
 
-  __table() {
-    const rows = this.__rows()
-    return <Table>
-      <TableHeader displaySelectAll={false}>
-        <TableRow>
-          <TableHeaderColumn>Num</TableHeaderColumn>
-          <TableHeaderColumn>ID</TableHeaderColumn>
-          <TableHeaderColumn>Name</TableHeaderColumn>
-          <TableHeaderColumn>Participants</TableHeaderColumn>
-          <TableHeaderColumn>Public</TableHeaderColumn>
-          <TableHeaderColumn>Description</TableHeaderColumn>
-        </TableRow>
-      </TableHeader>
-      <TableBody displayRowCheckbox={false}>
-        {rows}
-      </TableBody>
-      </Table>
-  }
-
-  __rows () {
+  __table () {
       console.log(typeof(this.props.groups))
       return this.props.groups.map( (group, index) => (
-        <TableRow key={index}>
-        <TableRowColumn>{index+1}</TableRowColumn>
-        <TableRowColumn>{group._id}</TableRowColumn>
-        <TableRowColumn>{group.name}</TableRowColumn>
-        <TableRowColumn>{group.participants.map((participant, index) => (participant['username']+", "))}</TableRowColumn>
-        <TableRowColumn>{String(group.status)}</TableRowColumn>
-        <TableRowColumn>{group.description}</TableRowColumn>
-        </TableRow>
-      ) )
+          <Tab style={this.tabsStyle} label={group.name} value={group._id}>
+            <DetailGroup group={group}/>
+          </Tab>
+      ))
   }
 
   render() {
     let content
-    console.log(this.props.groups)
     if (this.props.groups !== undefined)
         if (this.props.groups.length === 0)
             content = <h3>No groups were found</h3>
         else
-            console.log("top")
             content =  this.__table()
-    return (<div>{content}</div>)
+    return (
+        <Paper zDepth={3} style={{marginTop:"35px", width:"84%", float:"right"}}>
+            <Tabs onChange={this.change_active}>
+                {content}
+            </Tabs>
+        </Paper>)
   }
 }
 
