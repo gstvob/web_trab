@@ -5,8 +5,7 @@ import * as db from "./db"
 //import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 //import schema from "./apollo";
 
-const DATABASE = process.env.DATABASE;
-
+const DATABASE = "mongodb://admin:admin@ds111103.mlab.com:11103/groups"
 const app = express();
 
 if (DATABASE === undefined) {

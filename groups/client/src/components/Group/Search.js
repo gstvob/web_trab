@@ -7,7 +7,7 @@ import FindByName from "./FindByName";
 
 class Search extends Component {
     state = {
-      type: 'all',
+      tab: 'all',
     };
 
     tabsStyle = {

@@ -35,6 +35,12 @@ class App extends Component {
         this.setState(curState => (new_state))
     }
 
+
+    handle_group_events = () => {
+        let new_state = {current: this.action.HOME};
+        this.setState(curState => (new_state));
+    }
+
     addGroupPage = () => {
         let new_state = {current: this.action.ADDGROUP};
         this.setState(curState => (new_state));
@@ -51,6 +57,10 @@ class App extends Component {
         let new_state = {current:this.action.SHOWGROUPS};
         this.setState(curState => (new_state));
     }
+    search_group = () => {
+        let new_state = {current:this.action.SEARCH};
+        this.setState(curState => (new_state))
+    }
     get_user_groups = () => {
         operation.find_user_groups(this.state.user[0]["_id"])
             .then((groups) => this._handle_groups(groups))
@@ -60,6 +70,7 @@ class App extends Component {
         let new_state = {current:this.action.SHOWGROUPS, groups:groups}
         this.setState(curState => (new_state))
     }
+
     _setcontent = (current) => {
 
         switch(current) {
@@ -70,14 +81,14 @@ class App extends Component {
             case this.action.ADDGROUP:
                 return <AddGroup user={this.state.user[0]["_id"]}onAdd ={this.new_group}/>
             case this.action.SHOWGROUPS:
-                return <ViewGroup user={this.state.user[0]["_id"]} groups={this.state.groups} />
+                return <ViewGroup handler={this.handle_group_events} user={this.state.user[0]["_id"]} groups={this.state.groups} />
             default:
                 return <div> Bem vindo {this.state.user === undefined ? "":this.state.user[0]["username"]}</div>
         }
     }
     render () {
         let content = this._setcontent(this.state.current);
-
+        
         return (
             <div>
                 <Paper>

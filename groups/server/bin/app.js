@@ -23,8 +23,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 //import schema from "./apollo";
 
-var DATABASE = process.env.DATABASE;
-
+var DATABASE = "mongodb://admin:admin@ds111103.mlab.com:11103/groups";
 var app = (0, _express2.default)();
 
 if (DATABASE === undefined) {

@@ -37,19 +37,22 @@ class DetailGroup extends Component {
                 this.setState(curState => (new_state));
         })
         .catch(r=>console.log("fail"));
+        this.props.handler();
     }
 
     render = () => {
         let userItems = [];
-        let about = this.props.group.description===""? undefined:"Sobre: "+ this.props.group.description;
+        let about = this.props.group.description===""? undefined:"Sobre o grupo: "+ this.props.group.description;
         let participants = []
 
         for (let i in this.props.group.participants) {
             participants.push(<p key={i}>{this.props.group.participants[i].username}</p>)
         }
         let infos = (
-            <Paper style={{float:"left"}}>
+            <Paper zDepth={2} style={{width:"50%", float:"left"}}>
+                Participantes:
                 {participants}
+                <br/>
                 <p> {about} </p>
             </Paper>
         );
@@ -63,13 +66,18 @@ class DetailGroup extends Component {
                 );
             }
             for (let i in this.state.user) {
-                userItems.push(<MenuItem value={this.state.user[i]._id} key={i} primaryText={this.state.user[i].username}/>);
+                let user = this.state.user[i]
+                var isInArray = this.props.group.participants.some(function (participant) {
+                    return participant._id === user._id
+                });
+                if (user._id !== this.props.group.admin && !isInArray)
+                    userItems.push(<MenuItem value={user._id} key={i} primaryText={user.username}/>);
             }
 
             return (
                 <div>
                     {infos}
-                    <Paper style={{float:"right"}}>
+                    <Paper zDepth={2}>
                         <CardText>
                             {this.state.success}
                             <SelectField

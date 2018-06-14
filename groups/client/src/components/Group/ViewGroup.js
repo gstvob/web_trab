@@ -12,7 +12,7 @@ class ViewGroup extends Component {
   __table () {
       return this.props.groups.map( (group, index) => (
           <Tab key={index} style={this.tabsStyle} label={group.name} value={group._id}>
-            <DetailGroup user={this.props.user} group={group}/>
+            <DetailGroup handler={this.props.handler} user={this.props.user} group={group}/>
           </Tab>
       ))
   }
