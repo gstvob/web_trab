@@ -70,7 +70,7 @@ class App extends Component {
             case this.action.ADDGROUP:
                 return <AddGroup user={this.state.user[0]["_id"]}onAdd ={this.new_group}/>
             case this.action.SHOWGROUPS:
-                return <ViewGroup groups={this.state.groups} />
+                return <ViewGroup user={this.state.user[0]["_id"]} groups={this.state.groups} />
             default:
                 return <div> Bem vindo {this.state.user === undefined ? "":this.state.user[0]["username"]}</div>
         }
